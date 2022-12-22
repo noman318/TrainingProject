@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { postLogin } from '../services/MyData.js';
 
 function Copyright(props) {
   return (
@@ -29,13 +30,23 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
+  const [errMsg, setErrMsg] = useState('');
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formData = {email: data.get('email'),password: data.get('password'),}
+    console.log(formData);
+    postLogin(formData)
+    .then(res=>{
+      if(res.data.err === 0){
+        console.log(res.data)
+      }
+      if(res.data.err === 0){
+        setErrMsg(res.data.msg)
+      }
+    })
+    .catch(err=> console.log(err))
   };
 
   return (
@@ -56,6 +67,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          {errMsg!=="" && <p>{errMsg}</p> }
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -96,7 +108,7 @@ export default function Login() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/registration" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
