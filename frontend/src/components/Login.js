@@ -1,28 +1,37 @@
-import React,{useState} from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { postLogin } from '../services/MyData.js';
+import React, { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { isAdmin, isLoggedIn, postLogin } from "../services/MyData";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Your Website
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -30,23 +39,38 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-  const [errMsg, setErrMsg] = useState('');
-  
+  const [errMsg, setErrMsg] = useState("");
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const formData = {email: data.get('email'),password: data.get('password'),}
+    const formData = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
     console.log(formData);
     postLogin(formData)
-    .then(res=>{
-      if(res.data.err === 0){
-        console.log(res.data)
-      }
-      if(res.data.err === 0){
-        setErrMsg(res.data.msg)
-      }
-    })
-    .catch(err=> console.log(err))
+      .then((res) => {
+        if (res.data.err === 0) {
+          // console.log(res.data);
+          localStorage.setItem("_token", res.data.token);
+          isLoggedIn();
+          isAdmin();
+          toast.success("Logged in Successfully");
+          setTimeout(() => {
+            navigate("/products");
+          }, 2000);
+        }
+        if (res.data.err === 1) {
+          setErrMsg(res.data.msg);
+          toast.error("Please Register first");
+          setTimeout(() => {
+            navigate("/registration");
+          }, 3000);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -56,19 +80,24 @@ export default function Login() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          {errMsg!=="" && <p>{errMsg}</p> }
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {errMsg !== "" && <Alert severity="error">{errMsg}</Alert>}
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required

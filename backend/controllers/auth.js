@@ -10,13 +10,13 @@ async function signIn(req, res) {
   let user = await User.findOne({ email });
 
   if (!user) {
-    return res.send({"err":1,"msg":"This email has not been registered!"});
+    return res.send({ err: 1, msg: "This email has not been registered!" });
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword) {
-    return res.send({"err":1,"msg":"Invalid Credentials!"});
+    return res.send({ err: 1, msg: "Invalid Credentials!" });
   }
 
   const token = jwt.sign(
@@ -31,8 +31,8 @@ async function signIn(req, res) {
     name: `${user.firstName} ${user.lastName}`,
     email: user.email,
     isAuthenticated: true,
-    token:token,
-    err:0
+    token: token,
+    err: 0,
   });
 }
 
@@ -47,14 +47,16 @@ async function signUp(req, res) {
   let user = await User.findOne({ email: req.body.email });
 
   if (user) {
-    return res
-     .send({"err":"1","msg":"Try any other email, this email is already registered!"});
+    return res.send({
+      err: "1",
+      msg: "Try any other email, this email is already registered!",
+    });
   }
 
-  let userPhone = await User.findOne({ contactNumber: req.body.contactNumber });
+  let userPhone = await User.findOne({ phone: req.body.phone });
 
   if (userPhone) {
-    return res.send({"err":"1","msg":"Number Already exists"});
+    return res.send({ err: "1", msg: "Number Already exists" });
   }
 
   try {
@@ -64,7 +66,7 @@ async function signUp(req, res) {
       password: await bcrypt.hash(req.body.password, salt),
     });
     const response = await user.save();
-    res.send({"err":0,"msg":"User Registered"});
+    res.send({ err: 0, msg: "User Registered" });
   } catch (ex) {
     res.status(400).send(ex.message);
   }

@@ -12,7 +12,7 @@ const Address = mongoose.model(
       type: String,
       required: true,
     },
-    contactNumber: {
+    phone: {
       type: Number,
       required: true,
     },
@@ -41,7 +41,7 @@ const Address = mongoose.model(
 const validateAddress = (address) => {
     const addressSchema = Joi.object({
       name: Joi.string().min(0).max(50).required(),
-      contactNumber: Joi.number().min(1000000000).max(99999999999).required(),
+      phone: Joi.number().min(1000000000).max(99999999999).required(),
       city: Joi.string().min(0).max(50).required(),
       zipCode: Joi.number().min(100000).max(999999).required(),
       landmark: Joi.optional(),

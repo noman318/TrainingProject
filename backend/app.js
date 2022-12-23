@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const routes = require('./index');
+const routes = require("./index");
 const app = express();
 
 app.use(cors());
@@ -12,20 +12,22 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const connectionString =
-  "mongodb://localhost:27017/myTrainProj";
+const connectionString = "mongodb://localhost:27017/myTrainProj";
 
 mongoose
-  .connect(connectionString,{ useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
+  .connect(connectionString, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+  })
   .then((res) => console.log("Connected to db successfully"))
   .catch((err) => console.log(err));
 
-app.use("/Images",express.static("uploads"))
+app.use("/Images", express.static("uploads"));
 
-
-app.get('/api',(req,res)=>{
-  res.send('testing')
-})
-app.use('/', routes);
+app.get("/api", (req, res) => {
+  res.send("testing");
+});
+app.use("/", routes);
 
 app.listen(8000, () => console.log("Listening on port 8000"));
