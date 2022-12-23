@@ -191,7 +191,7 @@ export const AddProducts = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Add Product
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

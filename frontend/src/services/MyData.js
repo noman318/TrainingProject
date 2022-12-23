@@ -48,6 +48,10 @@ const addProduct = (data) => {
   return axios.post(`${apiURL}products`, data);
 };
 
+const getProducts = () => {
+  return axios.get(`${apiURL}products`);
+};
+
 export {
   postLogin,
   postRegister,
@@ -57,4 +61,5 @@ export {
   doLogout,
   isAdmin,
   addProduct,
+  getProducts,
 };
