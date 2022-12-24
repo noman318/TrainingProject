@@ -1,13 +1,34 @@
-import * as React from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { isAdmin } from "../services/MyData";
+import { isAdmin, deleteProducts } from "../services/MyData";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function ProductDetails({ prodata }) {
+  // const [state, setState] = useState([]);
+  const navigate = useNavigate();
+
+  const deleteProduct = (id) => {
+    console.log("delete Products");
+    if (window.confirm("Do you want to delete ?")) {
+      deleteProducts(id).then((res) => {
+        if (res.data) {
+          toast.error("Product Deleted");
+          // toast.error("Product Deleted Successfully");
+          // let data = state.prodata.filter((prodata) => prodata._id !== id);
+          // setState({ prodata: data });
+          setTimeout(() => {
+            navigate(0);
+          }, 3000);
+        }
+      });
+    }
+  };
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -28,7 +49,9 @@ export default function ProductDetails({ prodata }) {
         {isAdmin() && (
           <>
             <Button size="small">Edit</Button>
-            <Button size="small">Delete</Button>
+            <Button size="small" onClick={() => deleteProduct(prodata._id)}>
+              Delete
+            </Button>
           </>
         )}
       </CardActions>

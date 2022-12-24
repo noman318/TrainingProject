@@ -30,7 +30,7 @@ function App() {
         <Header />
         <Container>
           <ToastContainer
-            position="top-center"
+            position="bottom-center"
             autoClose={2000}
             hideProgressBar={false}
             newestOnTop={false}
@@ -39,7 +39,7 @@ function App() {
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme="dark"
+            theme="light"
           />
           <Routes>
             <Route path="/" element={<Home />} />

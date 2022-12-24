@@ -52,6 +52,11 @@ const getProducts = () => {
   return axios.get(`${apiURL}products`);
 };
 
+const deleteProducts = (id) => {
+  console.log(id);
+  return axios.delete(`${apiURL}products/${id}`);
+};
+
 export {
   postLogin,
   postRegister,
@@ -62,4 +67,5 @@ export {
   isAdmin,
   addProduct,
   getProducts,
+  deleteProducts,
 };

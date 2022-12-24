@@ -13,6 +13,8 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { addProduct } from "../services/MyData";
 import Alert from "@mui/material/Alert";
@@ -37,6 +39,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export const AddProducts = () => {
+  const navigate = useNavigate();
   const [state, setState] = useState({
     errMsg: "",
     succMsg: "",
@@ -68,16 +71,21 @@ export const AddProducts = () => {
         addProduct(senddata).then((res) => {
           if (res.data.err == 0) {
             setState({ ...state, succMsg: res.data.msg });
+            setTimeout(() => {
+              navigate("/products");
+            }, 2000);
           }
           if (res.data.err == 1) {
             setState({ ...state, errMsg: res.data.msg });
           }
         });
       } else {
-        setState({ ...state, errMsg: "Only support Jpg and Png Image" });
+        toast.error(
+          setState({ ...state, errMsg: "Only support Jpg and Png Image" })
+        );
       }
     } else {
-      setState({ ...state, errMsg: "Please select a image" });
+      toast.error(setState({ ...state, errMsg: "Please select a image" }));
     }
   };
 
