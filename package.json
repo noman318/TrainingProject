@@ -1,10 +1,13 @@
 {
   "name": "trainingproject",
   "version": "1.0.0",
-  "description": "scripts for froontend and backend starting",
+  "description": "scripts for frontend and backend starting",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server":"nodemon backend/app.js",
+    "front":"npm start --prefix frontend",
+    "app":"concurrently \"npm run server\" \"npm run front\""
   },
   "repository": {
     "type": "git",
@@ -16,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/noman318/TrainingProject/issues"
   },
-  "homepage": "https://github.com/noman318/TrainingProject#readme"
+  "homepage": "https://github.com/noman318/TrainingProject#readme",
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20"
+  }
 }
