@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -10,8 +10,17 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function ProductDetails({ prodata }) {
-  // const [state, setState] = useState([]);
+  const [state, setState] = useState([]);
   const navigate = useNavigate();
+
+  const editProductClick = (_id) => {
+    navigate(`/editproducts/${prodata._id}`);
+  };
+
+  const getProdById = (id) => {
+    console.log("getbyId");
+    navigate(`/products/${id}`);
+  };
 
   const deleteProduct = (id) => {
     console.log("delete Products");
@@ -20,11 +29,10 @@ export default function ProductDetails({ prodata }) {
         if (res.data) {
           toast.error("Product Deleted");
           // toast.error("Product Deleted Successfully");
-          // let data = state.prodata.filter((prodata) => prodata._id !== id);
-          // setState({ prodata: data });
-          setTimeout(() => {
-            navigate(0);
-          }, 3000);
+          let data = state.prodata.map((prodata) => prodata._id !== id);
+          setState({ prodata: data });
+          // setTimeout(() => {}, 3000);
+          // navigate(0);
         }
       });
     }
@@ -45,10 +53,14 @@ export default function ProductDetails({ prodata }) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">More</Button>
+        <Button size="small" onClick={() => getProdById(prodata._id)}>
+          More
+        </Button>
         {isAdmin() && (
           <>
-            <Button size="small">Edit</Button>
+            <Button size="small" onClick={() => editProductClick(prodata._id)}>
+              Edit
+            </Button>
             <Button size="small" onClick={() => deleteProduct(prodata._id)}>
               Delete
             </Button>

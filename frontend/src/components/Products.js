@@ -21,11 +21,11 @@ const Products = () => {
     <div>
       <h1>Products</h1>
       <Grid container spacing={2}>
-        {proData?.map(pro => 
+        {proData?.map((pro) => (
           <Grid item xs={4} key={pro._id}>
             <ProductDetails prodata={pro} />
           </Grid>
-        )}
+        ))}
       </Grid>
     </div>
   );

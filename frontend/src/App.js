@@ -12,6 +12,8 @@ import { isAdmin, isLoggedIn } from "./services/MyData";
 import { Navigate } from "react-router-dom";
 import { Cart } from "./components/Cart";
 import { AddProducts } from "./components/AddProducts";
+import { EditProducts } from "./components/EditProducts";
+import GetProductsById from "./components/GetProductsById";
 
 function App() {
   const ProtectRoute = ({ children }) => {
@@ -45,6 +47,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registraion />} />
+            <Route path="/products/:id" element={<GetProductsById />} />
             <Route
               path="/products"
               element={
@@ -66,6 +69,14 @@ function App() {
               element={
                 <ProtectAdminRoute>
                   <AddProducts />
+                </ProtectAdminRoute>
+              }
+            />
+            <Route
+              path={`/editproducts/:id`}
+              element={
+                <ProtectAdminRoute>
+                  <EditProducts />
                 </ProtectAdminRoute>
               }
             />

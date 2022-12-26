@@ -43,13 +43,20 @@ const doLogout = () => {
   // navigate("/");
 };
 
+const getProducts = () => {
+  return axios.get(`${apiURL}products`);
+};
+
 const addProduct = (data) => {
   console.log("0000000000000000000000000");
   return axios.post(`${apiURL}products`, data);
 };
 
-const getProducts = () => {
-  return axios.get(`${apiURL}products`);
+const editProduct = (id, data) => {
+  console.log(id);
+  console.log(data);
+  console.log("0000000000000000000000000");
+  return axios.post(`${apiURL}products/${id}`, data);
 };
 
 const deleteProducts = (id) => {
@@ -68,4 +75,5 @@ export {
   addProduct,
   getProducts,
   deleteProducts,
+  editProduct,
 };
