@@ -5,6 +5,8 @@ const apiURL = "http://localhost:8000/api/v1/";
 // eslint-disable-next-line react-hooks/rules-of-hooks
 // const navigate = useNavigate();
 
+// const id = useParams(id)
+
 const postLogin = (data) => {
   return axios.post(`${apiURL}auth`, data);
 };
@@ -56,7 +58,7 @@ const editProduct = (id, data) => {
   console.log(id);
   console.log(data);
   console.log("0000000000000000000000000");
-  return axios.post(`${apiURL}products/${id}`, data);
+  return axios.put(`${apiURL}products/${id}`, data);
 };
 
 const deleteProducts = (id) => {

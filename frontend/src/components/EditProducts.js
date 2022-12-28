@@ -18,6 +18,8 @@ import { editProduct } from "../services/MyData";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
+import { useFormik } from "formik";
+import { editProdSchema } from "../schema/editProd";
 function Copyright(props) {
   return (
     <Typography
@@ -38,7 +40,27 @@ function Copyright(props) {
 
 const theme = createTheme();
 
+const initialEditValues = {
+  name: "",
+  category: "",
+  price: "",
+  description: "",
+  manufacturer: "",
+  availableItems: "",
+  imagePath: null,
+};
+
 export const EditProducts = ({ prodata }) => {
+  const { values, errors, onChange, touched, handleBlur, handleChange } =
+    useFormik({
+      initialValues: initialEditValues,
+      validationSchema: editProdSchema,
+      onSubmit: (values) => {
+        console.log(initialEditValues);
+        console.log(values);
+      },
+    });
+  // console.log(errors);
   const getProdById = async (id) => {
     console.log(id);
     const apiURL = `http://localhost:8000/api/v1/products/${id}`;
@@ -54,7 +76,6 @@ export const EditProducts = ({ prodata }) => {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState(null);
   const [manufacturer, setManufacturer] = useState("");
   const [category, setCategory] = useState("");
   const [availableItems, setAvailableItems] = useState(0);
@@ -71,6 +92,19 @@ export const EditProducts = ({ prodata }) => {
     const fetchProductData = async () => {
       const data = await getProdById(params?.id);
       setProductData(data);
+      const {
+        name,
+        price,
+        description,
+        category,
+        availableItems,
+        manufacturer,
+      } = data;
+      setName(name);
+      setPrice(price);
+      setAvailableItems(availableItems);
+      setManufacturer(manufacturer);
+      setDescription(description);
     };
 
     fetchProductData();
@@ -91,7 +125,6 @@ export const EditProducts = ({ prodata }) => {
     }
   };
 
-  // cs
   const handleSubmit = (event) => {
     event.preventDefault();
     if (state.imagePath != "") {
@@ -110,7 +143,7 @@ export const EditProducts = ({ prodata }) => {
         senddata.append("manufacturer", data.get("manufacturer"));
         senddata.append("availableItems", data.get("availableItems"));
         senddata.append("attach", state.imagePath);
-        editProduct(senddata).then((res) => {
+        editProduct(params?.id, senddata).then((res) => {
           if (res.data.err == 0) {
             setState({ ...state, succMsg: res.data.msg });
             setTimeout(() => {
@@ -169,10 +202,18 @@ export const EditProducts = ({ prodata }) => {
                   id="name"
                   label="Name"
                   // value={productData.name}
+                  // value={values.name}
+                  // onChange={handleChange}
+                  onBlur={handleBlur}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   autoFocus
                 />
+                {/* {errors.name && touched.name ? (
+                  <p className="text-danger">{errors.name}</p>
+                ) : (
+                  ""
+                )} */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -182,19 +223,36 @@ export const EditProducts = ({ prodata }) => {
                   label="Category"
                   name="category"
                   autoComplete="Category"
-                  value={productData.category}
+                  onChange={(e) => {
+                    // console.log(e.target.value);
+                    setCategory(e.target.value);
+                  }}
+                  value={category}
+                  onBlur={handleBlur}
                 />
+                {/* {errors.category && touched.category ? (
+                  <p className="text-danger">{errors.category}</p>
+                ) : (
+                  ""
+                )} */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
                   id="price"
-                  value={productData.price}
+                  value={price}
                   label="Price"
                   name="price"
                   autoComplete="price"
+                  onBlur={handleBlur}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
+                {/* {errors.price && touched.price ? (
+                  <p className="text-danger">{errors.price}</p>
+                ) : (
+                  ""
+                )} */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -203,10 +261,17 @@ export const EditProducts = ({ prodata }) => {
                   name="description"
                   label="description"
                   type="text"
-                  value={productData.description}
+                  value={description}
                   id="description"
                   autoComplete="description"
+                  onBlur={handleBlur}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
+                {/* {errors.description && touched.description ? (
+                  <p className="text-danger">{errors.description}</p>
+                ) : (
+                  ""
+                )} */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -215,9 +280,16 @@ export const EditProducts = ({ prodata }) => {
                   id="manufacturer"
                   label="manufacturer"
                   name="manufacturer"
-                  value={productData.manufacturer}
+                  value={manufacturer}
                   autoComplete="manufacturer"
+                  onBlur={handleBlur}
+                  onChange={(e) => setManufacturer(e.target.value)}
                 />
+                {/* {errors.manufacturer && touched.manufacturer ? (
+                  <p className="text-danger">{errors.manufacturer}</p>
+                ) : (
+                  ""
+                )} */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -227,8 +299,15 @@ export const EditProducts = ({ prodata }) => {
                   label="availableItems"
                   name="availableItems"
                   autoComplete="availableItems"
-                  value={productData.availableItems}
+                  value={availableItems}
+                  onBlur={handleBlur}
+                  onChange={(e) => setAvailableItems(e.target.value)}
                 />
+                {/* {errors.availableItems && touched.availableItems ? (
+                  <p className="text-danger">{errors.availableItems}</p>
+                ) : (
+                  ""
+                )} */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -239,9 +318,14 @@ export const EditProducts = ({ prodata }) => {
                   label="Image"
                   name="image"
                   autoComplete="image"
-                  value={productData.imagePath}
+                  onBlur={handleBlur}
                   onChange={uploadImage}
                 />
+                {/* {errors.imagePath && touched.imagePath ? (
+                  <p className="text-danger">{errors.imagePath}</p>
+                ) : (
+                  ""
+                )} */}
               </Grid>
             </Grid>
             <Button
@@ -250,7 +334,7 @@ export const EditProducts = ({ prodata }) => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Add Product
+              Edit Product
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

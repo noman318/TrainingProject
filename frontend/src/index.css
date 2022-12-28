@@ -23,3 +23,12 @@ code {
   display: flex;
   flex-direction: column !important;
 }
+.card_main {
+  height: 38rem;
+  width: 30rem;
+  padding: 5px;
+  border: 4px solid black;
+}
+.card_img {
+  height: 20rem !important;
+}

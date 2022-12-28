@@ -17,6 +17,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { postRegister } from "../services/MyData";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useFormik } from "formik";
+import { registerSchema } from "../schema/registerSchema";
 
 function Copyright(props) {
   return (
@@ -38,7 +40,27 @@ function Copyright(props) {
 
 const theme = createTheme();
 
+const initialRegsiterValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  password: "",
+  cpass: "",
+};
+
 export default function Registration() {
+  const { values, errors, onChange, touched, handleBlur, handleChange } =
+    useFormik({
+      initialValues: initialRegsiterValues,
+      validationSchema: registerSchema,
+      onSubmit: (values) => {
+        console.log(initialRegsiterValues);
+        console.log(values);
+      },
+    });
+  console.log(errors);
+
   const [state, setState] = useState({ errMsg: "", succMsg: "" });
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -114,6 +136,9 @@ export default function Registration() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={values.firstName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -124,6 +149,9 @@ export default function Registration() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={values.lastName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -134,6 +162,9 @@ export default function Registration() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -144,6 +175,9 @@ export default function Registration() {
                   label="Contact Number"
                   name="phone"
                   autoComplete="phone"
+                  value={values.phone}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
               </Grid>
               <Grid item xs={12}>

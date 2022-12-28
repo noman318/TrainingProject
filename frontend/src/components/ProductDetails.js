@@ -9,8 +9,7 @@ import { isAdmin, deleteProducts } from "../services/MyData";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export default function ProductDetails({ prodata }) {
-  const [state, setState] = useState([]);
+export default function ProductDetails({ prodata, filterProduct }) {
   const navigate = useNavigate();
 
   const editProductClick = (_id) => {
@@ -27,41 +26,42 @@ export default function ProductDetails({ prodata }) {
     if (window.confirm("Do you want to delete ?")) {
       deleteProducts(id).then((res) => {
         if (res.data) {
+          console.log("res.data", res.data);
           toast.error("Product Deleted");
-          // toast.error("Product Deleted Successfully");
-          let data = state.prodata.map((prodata) => prodata._id !== id);
-          setState({ prodata: data });
-          // setTimeout(() => {}, 3000);
-          // navigate(0);
+          filterProduct(id);
         }
       });
     }
   };
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card className="card_main" sx={{ maxWidth: 345 }}>
       <CardMedia
+        className="card_img"
         sx={{ height: 140 }}
         image={prodata.imageURL}
-        title="green iguana"
+        title="Producs"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {prodata.name}
+        <Typography gutterBottom variant="h4" component="div">
+          Name: {prodata.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="h5" color="text.secondary">
           Price: {prodata.price}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => getProdById(prodata._id)}>
+        <Button size="large" onClick={() => getProdById(prodata._id)}>
           More
+        </Button>
+        <Button size="large" onClick={() => getProdById(prodata._id)}>
+          Add To Cart
         </Button>
         {isAdmin() && (
           <>
-            <Button size="small" onClick={() => editProductClick(prodata._id)}>
+            <Button size="large" onClick={() => editProductClick(prodata._id)}>
               Edit
             </Button>
-            <Button size="small" onClick={() => deleteProduct(prodata._id)}>
+            <Button size="large" onClick={() => deleteProduct(prodata._id)}>
               Delete
             </Button>
           </>

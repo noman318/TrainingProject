@@ -18,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { addProduct } from "../services/MyData";
 import Alert from "@mui/material/Alert";
+import { addProdSchema } from "../schema/addProd";
+import { useFormik } from "formik";
 function Copyright(props) {
   return (
     <Typography
@@ -38,7 +40,28 @@ function Copyright(props) {
 
 const theme = createTheme();
 
+const initialAddlValues = {
+  name: "",
+  category: "",
+  price: "",
+  description: "",
+  manufacturer: "",
+  availableItems: "",
+  imagePath: null,
+};
+
 export const AddProducts = () => {
+  const { values, errors, onChange, touched, handleBlur, handleChange } =
+    useFormik({
+      initialValues: initialAddlValues,
+      validationSchema: addProdSchema,
+      onSubmit: (values) => {
+        // console.log(initialAddlValues);
+        console.log(values);
+      },
+    });
+  // console.log(errors);
+
   const navigate = useNavigate();
   const [state, setState] = useState({
     errMsg: "",
@@ -126,8 +149,16 @@ export const AddProducts = () => {
                   fullWidth
                   id="name"
                   label="Name"
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   autoFocus
                 />
+                {errors.name && touched.name ? (
+                  <p className="text-danger">{errors.name}</p>
+                ) : (
+                  ""
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -137,7 +168,15 @@ export const AddProducts = () => {
                   label="Category"
                   name="category"
                   autoComplete="Category"
+                  value={values.cartegory}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.category && touched.category ? (
+                  <p className="text-danger">{errors.category}</p>
+                ) : (
+                  ""
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -147,7 +186,15 @@ export const AddProducts = () => {
                   label="Price"
                   name="price"
                   autoComplete="price"
+                  value={values.price}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.price && touched.price ? (
+                  <p className="text-danger">{errors.price}</p>
+                ) : (
+                  ""
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -158,7 +205,15 @@ export const AddProducts = () => {
                   type="text"
                   id="description"
                   autoComplete="description"
+                  value={values.description}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.description && touched.description ? (
+                  <p className="text-danger">{errors.description}</p>
+                ) : (
+                  ""
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -168,7 +223,15 @@ export const AddProducts = () => {
                   label="manufacturer"
                   name="manufacturer"
                   autoComplete="manufacturer"
+                  value={values.manufacturer}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.manufacturer && touched.manufacturer ? (
+                  <p className="text-danger">{errors.manufacturer}</p>
+                ) : (
+                  ""
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -178,7 +241,15 @@ export const AddProducts = () => {
                   label="availableItems"
                   name="availableItems"
                   autoComplete="availableItems"
+                  value={values.availableItems}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
+                {errors.availableItems && touched.availableItems ? (
+                  <p className="text-danger">{errors.availableItems}</p>
+                ) : (
+                  ""
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -189,6 +260,8 @@ export const AddProducts = () => {
                   label="Image"
                   name="image"
                   autoComplete="image"
+                  value={values.imagePath}
+                  onBlur={handleBlur}
                   onChange={uploadImage}
                 />
               </Grid>
